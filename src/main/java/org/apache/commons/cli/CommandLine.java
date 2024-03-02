@@ -21,11 +21,14 @@ import static org.apache.commons.cli.Util.EMPTY_STRING_ARRAY;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Represents list of arguments parsed against a {@link Options} descriptor.
@@ -508,6 +511,75 @@ public class CommandLine implements Serializable {
      */
     public <T> T getParsedOptionValue(final String opt, final T defaultValue) throws ParseException {
         return getParsedOptionValue(resolveOption(opt), defaultValue);
+    }
+    
+    /**
+     * Gets a version of this {@code Option} converted to a particular type.
+     *
+     * @param option the name of the option.
+     * @param defaultValue the default value to return if opt is not set.
+     * @param <T> The return type for the method.
+     * @return the value parsed into a particular object.
+     * @throws ParseException if there are problems turning the option value into the desired type
+     * @see PatternOptionBuilder
+     * @since 1.7.0
+     */
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getParsedOptionValues(final Option option, final Supplier<List<T>> defaultValue) throws ParseException {
+        final String[] res = option == null ? null : getOptionValues(option);
+
+        try {
+            if (res == null) {
+                return defaultValue.get();
+            }
+            List<T> result = new ArrayList<>();
+            for (String s : res) {
+                try {
+                    result.add((T) option.getConverter().apply(s));
+                } catch (Throwable e) {
+                    if (e instanceof RuntimeException)
+                    {
+                        throw (RuntimeException) e;
+                    }
+                    throw new RuntimeException(e);
+                }
+            }
+            return result;
+        } catch (final RuntimeException e) {
+            throw ParseException.wrap(e);
+        }
+    }
+    
+    public <T> List<T> getParsedOptionValues(final Option option, final List<T> defaultValue) throws ParseException {
+        return getParsedOptionValues(option, () -> defaultValue);
+    }
+    
+    public <T> List<T> getParsedOptionValues(final Option option) throws ParseException {
+        return getParsedOptionValues(option, Collections.emptyList());
+    }
+    
+    public <T> List<T> getParsedOptionValues(final String option, final Supplier<List<T>> defaultValue) throws ParseException {
+        return getParsedOptionValues(resolveOption(option), defaultValue);
+    }
+
+    public <T> List<T> getParsedOptionValues(final String option, final List<T> defaultValue) throws ParseException {
+        return getParsedOptionValues(resolveOption(option), () -> defaultValue);
+    }
+    
+    public <T> List<T> getParsedOptionValues(final String option) throws ParseException {
+        return getParsedOptionValues(resolveOption(option), Collections.emptyList());
+    }
+
+    public <T> List<T> getParsedOptionValues(final char option, final Supplier<List<T>> defaultValue) throws ParseException {
+        return getParsedOptionValues(String.valueOf(option), defaultValue);
+    }
+
+    public <T> List<T> getParsedOptionValues(final char option, final List<T> defaultValue) throws ParseException {
+        return getParsedOptionValues(String.valueOf(option), () -> defaultValue);
+    }
+    
+    public <T> List<T> getParsedOptionValues(final char option) throws ParseException {
+        return getParsedOptionValues(String.valueOf(option), Collections.emptyList());
     }
 
     /**
