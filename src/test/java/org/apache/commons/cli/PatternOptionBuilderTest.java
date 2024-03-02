@@ -135,7 +135,11 @@ public class PatternOptionBuilderTest {
          */
         final Options options = PatternOptionBuilder.parsePattern("a:b@cde>f+n%t/m*z#");
         final Date expectedDate = new Date(1023400137000L);
+<<<<<<< Upstream, based on origin/master
         final DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+=======
+        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+>>>>>>> 62e17b4 added CommandLine.getParseOptionValues()
         final String[] args = {"-c", "-a", "foo", "-b", "java.util.Vector", "-e", "build.xml", "-f", "java.util.Calendar", "-n", "4.5", "-t",
             "https://commons.apache.org", "-z", dateFormat.format(expectedDate), "-m", "test*"};
 

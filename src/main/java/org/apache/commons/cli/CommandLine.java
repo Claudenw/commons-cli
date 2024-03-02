@@ -21,14 +21,12 @@ import static org.apache.commons.cli.Util.EMPTY_STRING_ARRAY;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Represents list of arguments parsed against a {@link Options} descriptor.
@@ -512,7 +510,7 @@ public class CommandLine implements Serializable {
     public <T> T getParsedOptionValue(final String opt, final T defaultValue) throws ParseException {
         return getParsedOptionValue(resolveOption(opt), defaultValue);
     }
-    
+
     /**
      * Gets a version of this {@code Option} converted to a particular type.
      *
@@ -537,8 +535,7 @@ public class CommandLine implements Serializable {
                 try {
                     result.add((T) option.getConverter().apply(s));
                 } catch (Throwable e) {
-                    if (e instanceof RuntimeException)
-                    {
+                    if (e instanceof RuntimeException) {
                         throw (RuntimeException) e;
                     }
                     throw new RuntimeException(e);
@@ -549,15 +546,15 @@ public class CommandLine implements Serializable {
             throw ParseException.wrap(e);
         }
     }
-    
+
     public <T> List<T> getParsedOptionValues(final Option option, final List<T> defaultValue) throws ParseException {
         return getParsedOptionValues(option, () -> defaultValue);
     }
-    
+
     public <T> List<T> getParsedOptionValues(final Option option) throws ParseException {
         return getParsedOptionValues(option, Collections.emptyList());
     }
-    
+
     public <T> List<T> getParsedOptionValues(final String option, final Supplier<List<T>> defaultValue) throws ParseException {
         return getParsedOptionValues(resolveOption(option), defaultValue);
     }
@@ -565,7 +562,7 @@ public class CommandLine implements Serializable {
     public <T> List<T> getParsedOptionValues(final String option, final List<T> defaultValue) throws ParseException {
         return getParsedOptionValues(resolveOption(option), () -> defaultValue);
     }
-    
+
     public <T> List<T> getParsedOptionValues(final String option) throws ParseException {
         return getParsedOptionValues(resolveOption(option), Collections.emptyList());
     }
@@ -577,7 +574,7 @@ public class CommandLine implements Serializable {
     public <T> List<T> getParsedOptionValues(final char option, final List<T> defaultValue) throws ParseException {
         return getParsedOptionValues(String.valueOf(option), () -> defaultValue);
     }
-    
+
     public <T> List<T> getParsedOptionValues(final char option) throws ParseException {
         return getParsedOptionValues(String.valueOf(option), Collections.emptyList());
     }
