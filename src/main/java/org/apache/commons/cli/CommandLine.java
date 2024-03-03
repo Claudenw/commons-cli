@@ -512,14 +512,16 @@ public class CommandLine implements Serializable {
     }
 
     /**
-     * Gets a version of this {@code Option} converted to a particular type.
+     * Gets the list of the specified {@code Option} converted to a particular type.
+     * If the option is present in this command line but no values are provided an empty
+     * list is returned.
      *
      * @param option the name of the option.
      * @param defaultValue the default value to return if opt is not set.
      * @param <T> The return type for the method.
-     * @return the value parsed into a particular object.
+     * @return the list of value parsed into a particular object. May be empty or null.
      * @throws ParseException if there are problems turning the option value into the desired type
-     * @see PatternOptionBuilder
+     * @see #getParsedOptionValue(Option, Supplier)
      * @since 1.7.0
      */
     @SuppressWarnings("unchecked")
@@ -547,34 +549,135 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * Gets the list of the specified {@code Option} converted to a particular type.
+     * If the option is present in this command line but no values are provided an empty
+     * list is returned.
+     *
+     * @param option the name of the option.
+     * @param defaultValue the default value to return if opt is not set.
+     * @param <T> The return type for the method.
+     * @return the list of value parsed into a particular object. May be empty or null.
+     * @throws ParseException if there are problems turning the option value into the desired type
+     * @see #getParsedOptionValue(Option, Object)
+     * @since 1.7.0
+     */
     public <T> List<T> getParsedOptionValues(final Option option, final List<T> defaultValue) throws ParseException {
         return getParsedOptionValues(option, () -> defaultValue);
     }
 
+    /**
+     * Gets the list of the specified {@code Option} converted to a particular type.
+     * If the option is present in this command line but no values are provided an empty
+     * list is returned.  if the option is not present in this command and empty list is returned.
+     *
+     * @param option the name of the option.
+     * @param <T> The return type for the method.
+     * @return the list of value parsed into a particular object. May be empty or null.
+     * @throws ParseException if there are problems turning the option value into the desired type
+     * @see #getParsedOptionValue(Option)
+     * @since 1.7.0
+     */
     public <T> List<T> getParsedOptionValues(final Option option) throws ParseException {
         return getParsedOptionValues(option, Collections.emptyList());
     }
 
+    /**
+     * Gets the list of the specified {@code Option} converted to a particular type.
+     * If the option is present in this command line but no values are provided an empty
+     * list is returned.
+     *
+     * @param option the name of the option.
+     * @param defaultValue the default value to return if opt is not set.
+     * @param <T> The return type for the method.
+     * @return the list of value parsed into a particular object. May be empty or null.
+     * @throws ParseException if there are problems turning the option value into the desired type
+     * @see #getParsedOptionValue(String, Supplier)
+     * @since 1.7.0
+     */
     public <T> List<T> getParsedOptionValues(final String option, final Supplier<List<T>> defaultValue) throws ParseException {
         return getParsedOptionValues(resolveOption(option), defaultValue);
     }
 
+    /**
+     * Gets the list of the specified {@code Option} converted to a particular type.
+     * If the option is present in this command line but no values are provided an empty
+     * list is returned.
+     *
+     * @param option the name of the option.
+     * @param defaultValue the default value to return if opt is not set.
+     * @param <T> The return type for the method.
+     * @return the list of value parsed into a particular object. May be empty or null.
+     * @throws ParseException if there are problems turning the option value into the desired type
+     * @see #getParsedOptionValue(String, Object)
+     * @since 1.7.0
+     */
     public <T> List<T> getParsedOptionValues(final String option, final List<T> defaultValue) throws ParseException {
         return getParsedOptionValues(resolveOption(option), () -> defaultValue);
     }
 
+    /**
+     * Gets the list of the specified {@code Option} converted to a particular type.
+     * If the option is present in this command line but no values are provided an empty
+     * list is returned.  if the option is not present in this command and empty list is returned.
+     *
+     * @param option the name of the option.
+     * @param <T> The return type for the method.
+     * @return the list of value parsed into a particular object. May be empty or null.
+     * @throws ParseException if there are problems turning the option value into the desired type
+     * @see #getParsedOptionValue(String)
+     * @since 1.7.0
+     */
     public <T> List<T> getParsedOptionValues(final String option) throws ParseException {
         return getParsedOptionValues(resolveOption(option), Collections.emptyList());
     }
 
+    /**
+     * Gets the list of the specified {@code Option} converted to a particular type.
+     * If the option is present in this command line but no values are provided an empty
+     * list is returned.
+     *
+     * @param option the name of the option.
+     * @param defaultValue the default value to return if opt is not set.
+     * @param <T> The return type for the method.
+     * @return the list of value parsed into a particular object. May be empty or null.
+     * @throws ParseException if there are problems turning the option value into the desired type
+     * @see #getParsedOptionValue(char, Supplier)
+     * @since 1.7.0
+     */
     public <T> List<T> getParsedOptionValues(final char option, final Supplier<List<T>> defaultValue) throws ParseException {
         return getParsedOptionValues(String.valueOf(option), defaultValue);
     }
 
+    /**
+     * Gets the list of the specified {@code Option} converted to a particular type.
+     * If the option is present in this command line but no values are provided an empty
+     * list is returned.
+     *
+     * @param option the name of the option.
+     * @param defaultValue the default value to return if opt is not set.
+     * @param <T> The return type for the method.
+     * @return the list of value parsed into a particular object. May be empty or null.
+     * @throws ParseException if there are problems turning the option value into the desired type
+     * @see #getParsedOptionValue(char, Object)
+     * @since 1.7.0
+     */
     public <T> List<T> getParsedOptionValues(final char option, final List<T> defaultValue) throws ParseException {
         return getParsedOptionValues(String.valueOf(option), () -> defaultValue);
     }
 
+    /**
+     * Gets the list of the specified {@code Option} converted to a particular type.
+     * If the option is present in this command line but no values are provided an empty
+     * list is returned.  if the option is not present in this command and empty list is returned.
+     *
+     * @param option the name of the option.
+     * @param <T> The return type for the method.
+     * @return the list of value parsed into a particular object. May be empty or null.
+     * @throws ParseException if there are problems turning the option value into the desired type
+     * @see #getParsedOptionValue(char)
+     * @since 1.7.0
+     */
     public <T> List<T> getParsedOptionValues(final char option) throws ParseException {
         return getParsedOptionValues(String.valueOf(option), Collections.emptyList());
     }

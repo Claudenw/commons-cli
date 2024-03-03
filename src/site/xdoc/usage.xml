@@ -458,6 +458,26 @@ catch (ParseException exp) {
             Conversions that are added to the TypeHandler or that are specified directly will not deserialize if the option is serialized unless the type is registered with the TypeHandler 
             before deserialization begins.
         </p>
+        <subsection name="Converting (Parsing) Multiple Option Values">
+        <p>
+          Options may be specified as having multiple values and values may be listed as optional.  The method <code>commandLine.getParsedOptionValues(fooOpt)</code> will parse multiple values 
+          into a list of Objects using the converter as noted above.  If the option is not presend null is returned, if the option is present and no values are present the default provider
+          if specified) is used to construct the return value, by default <code>commandLine.getParsedOptionValues(fooOpt)</code> will return an empty list in this case.  For example:
+          <source>
+            Option fooOpt = Option.builder("foo")
+                      .hasArgs()
+                      .desc("the foo arg")
+                      .converter((s) -> new Foo(s))
+                      .build();
+            Options opts = new Options().addOption(fooOpt);
+            String[] args = {"-foo", "one", "two", "three" }
+            CommandLine commandLine = DefaultParser.builder().build().parse(options, args);
+            List foos = commandLine.commandLine.getParsedOptionValues(fooOpt);
+          </source>
+          The above source would return the the same result as <code>List.of( new Foo("one"), new Foo("two"), new Foo("three"))</code>.
+          If the argument list was empty the result would be <code>null</code>.  If the argument list was <code>args = {"-foo"}</code>, the result would be an empty list.
+        </p>
+      </subsection>
     </section>
   </body>
 </document>
